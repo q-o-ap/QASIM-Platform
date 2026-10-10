@@ -1,191 +1,84 @@
-import { useEffect, useState } from 'react';
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
 
-function App() {
-  const [dashboard, setDashboard] = useState(null);
-  const [loading, setLoading] = useState(true);
+dotenv.config();
 
-  useEffect(() => {
-    async function fetchDashboard() {
-      try {
-        const response = await fetch('/api/dashboard');
-        const data = await response.json();
-        setDashboard(data);
-      } catch (error) {
-        console.error('Failed to fetch dashboard data:', error);
-        setDashboard({
-          metrics: {
-            totalRevenue: '$0',
-            activeUsers: '0',
-            conversionRate: '0%',
-            avgRetention: '0%'
-          },
-          customers: [],
-          activity: [],
-          overview: {
-            monthlyGrowth: '0%',
-            churnRate: '0%',
-            responseTime: '0s'
-          }
-        });
-      } finally {
-        setLoading(false);
-      }
+const app = express();
+const port = process.env.PORT || 5000;
+
+app.use(cors());
+app.use(express.json());
+
+const crmMetrics = {
+  monthlyRevenue: '$148,260',
+  newLeads: '1,284',
+  winRate: '37.8%',
+  pipelineHealth: '84%' 
+};
+
+const deals = [
+  { client: 'Northwind Labs', value: '$24,800', stage: 'Proposal', owner: 'Alicia', probability: 72 },
+  { client: 'BluePeak Studio', value: '$18,400', stage: 'Negotiation', owner: 'Daniel', probability: 68 },
+  { client: 'Mercury Health', value: '$32,600', stage: 'Discovery', owner: 'Priya', probability: 41 },
+  { client: 'Orion Retail', value: '$16,900', stage: 'Closed Won', owner: 'Lucas', probability: 100 }
+];
+
+const leads = [
+  { name: 'Harbor Finance', company: 'Harbor Finance', source: 'Website', value: '$12,300', status: 'Qualified' },
+  { name: 'Summit Cloud', company: 'Summit Cloud', source: 'Referral', value: '$18,900', status: 'Follow-up' },
+  { name: 'Peak Works', company: 'Peak Works', source: 'Outbound', value: '$9,500', status: 'New' },
+  { name: 'Luma Retail', company: 'Luma Retail', source: 'Campaign', value: '$14,700', status: 'Qualified' }
+];
+
+const activity = [
+  { title: 'Call booked', detail: 'Discovery call scheduled with Summit Cloud', time: '15 min ago' },
+  { title: 'Email sent', detail: 'Proposal shared with Northwind Labs team', time: '1 hour ago' },
+  { title: 'Deal updated', detail: 'BluePeak moved to negotiation stage', time: '3 hours ago' },
+  { title: 'Lead scored', detail: 'Peak Works reached high-intent score', time: 'Yesterday' }
+];
+
+app.get('/api', (req, res) => {
+  res.json({
+    name: 'QASIM Platform API',
+    version: '1.0.0',
+    status: 'ready',
+    product: 'CRM Dashboard',
+    message: 'Welcome to the QASIM CRM backend.'
+  });
+});
+
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    service: 'qasim-crm-backend',
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.get('/api/dashboard', (req, res) => {
+  res.json({
+    metrics: crmMetrics,
+    deals,
+    leads,
+    activity,
+    overview: {
+      activeDeals: '42',
+      conversion: '18.4%',
+      avgCycleTime: '12 days',
+      teamTarget: '92%'
     }
+  });
+});
 
-    fetchDashboard();
-  }, []);
+app.get('/api/deals', (req, res) => {
+  res.json(deals);
+});
 
-  return (
-    <div className="app-shell">
-      <aside className="sidebar">
-        <div className="brand-block">
-          <div className="brand-mark">Q</div>
-          <div>
-            <div className="brand-name">QASIM</div>
-            <small>Growth Platform</small>
-          </div>
-        </div>
+app.get('/api/leads', (req, res) => {
+  res.json(leads);
+});
 
-        <nav className="nav">
-          <a className="active" href="#">Overview</a>
-          <a href="#">Customers</a>
-          <a href="#">Analytics</a>
-          <a href="#">Revenue</a>
-          <a href="#">Automation</a>
-          <a href="#">Settings</a>
-        </nav>
-
-        <div className="mini-panel">
-          <span>System status</span>
-          <strong>{loading ? 'Checking...' : 'Healthy'}</strong>
-        </div>
-      </aside>
-
-      <main className="main-panel">
-        <header className="topbar">
-          <div>
-            <p className="eyebrow">Dashboard</p>
-            <h1>Customer overview</h1>
-          </div>
-
-          <div className="topbar-actions">
-            <button className="ghost-btn">Export</button>
-            <button className="primary-btn">+ New account</button>
-          </div>
-        </header>
-
-        <section className="stats-grid">
-          {dashboard ? (
-            <>
-              <div className="stat-card accent">
-                <span>Total revenue</span>
-                <strong>{dashboard.metrics.totalRevenue}</strong>
-                <em>+12.4% vs last month</em>
-              </div>
-              <div className="stat-card">
-                <span>Active users</span>
-                <strong>{dashboard.metrics.activeUsers}</strong>
-                <em>+8.1% this week</em>
-              </div>
-              <div className="stat-card">
-                <span>Conversion rate</span>
-                <strong>{dashboard.metrics.conversionRate}</strong>
-                <em>+1.2 pts</em>
-              </div>
-              <div className="stat-card">
-                <span>Retention</span>
-                <strong>{dashboard.metrics.avgRetention}</strong>
-                <em>Excellent health</em>
-              </div>
-            </>
-          ) : (
-            <div className="loading-box">Loading dashboard data...</div>
-          )}
-        </section>
-
-        <section className="content-grid">
-          <div className="panel large-panel">
-            <div className="panel-header">
-              <h2>Customer growth</h2>
-              <span className="chip success">{dashboard?.overview?.monthlyGrowth || '+0%'}</span>
-            </div>
-
-            <div className="chart-bars" aria-label="Overview chart">
-              <div className="bar-group"><span className="bar h-52"></span><label>Jan</label></div>
-              <div className="bar-group"><span className="bar h-66"></span><label>Feb</label></div>
-              <div className="bar-group"><span className="bar h-57"></span><label>Mar</label></div>
-              <div className="bar-group"><span className="bar h-74"></span><label>Apr</label></div>
-              <div className="bar-group"><span className="bar h-86"></span><label>May</label></div>
-              <div className="bar-group"><span className="bar h-96"></span><label>Jun</label></div>
-            </div>
-          </div>
-
-          <div className="panel">
-            <div className="panel-header">
-              <h2>Health score</h2>
-            </div>
-            <div className="score-wrap">
-              <div className="score-ring">
-                <span>94%</span>
-              </div>
-              <ul className="score-list">
-                <li><strong>{dashboard?.overview?.churnRate || '0%'}</strong><span>Churn</span></li>
-                <li><strong>{dashboard?.overview?.responseTime || '0s'}</strong><span>Response</span></li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <section className="bottom-grid">
-          <div className="panel">
-            <div className="panel-header">
-              <h2>Top customers</h2>
-              <a href="#">View all</a>
-            </div>
-
-            <table className="customer-table">
-              <thead>
-                <tr>
-                  <th>Customer</th>
-                  <th>Plan</th>
-                  <th>Value</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(dashboard?.customers || []).map((customer) => (
-                  <tr key={customer.name}>
-                    <td>{customer.name}</td>
-                    <td>{customer.plan}</td>
-                    <td>{customer.value}</td>
-                    <td><span className={`status ${customer.status.toLowerCase()}`}>{customer.status}</span></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="panel">
-            <div className="panel-header">
-              <h2>Recent activity</h2>
-            </div>
-            <ul className="activity-list">
-              {(dashboard?.activity || []).map((item) => (
-                <li key={item.title}>
-                  <div className="dot"></div>
-                  <div>
-                    <strong>{item.title}</strong>
-                    <p>{item.detail}</p>
-                  </div>
-                  <span>{item.time}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      </main>
-    </div>
-  );
-}
-
-export default App;
+app.listen(port, () => {
+  console.log(`QASIM CRM API running on http://localhost:${port}`);
+});

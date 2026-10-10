@@ -1,93 +1,437 @@
-# QASIM Platform
+:root {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.5;
+  color: #e6edf7;
+  background: #07111d;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-QASIM Platform is a modern full-stack development platform starter built for product teams, internal tools, and scalable web applications. It includes a React frontend, an Express backend, PostgreSQL integration, Docker support, and a clean monorepo layout.
+* {
+  box-sizing: border-box;
+}
 
-## Tech Stack
+html, body, #root {
+  margin: 0;
+  min-height: 100%;
+  min-height: 100vh;
+}
 
-- Frontend: React + Vite
-- Backend: Node.js + Express
-- Database: PostgreSQL
-- Containerization: Docker + Docker Compose
-- Package management: npm workspaces
+body {
+  background: linear-gradient(135deg, #071219 0%, #0e1727 100%);
+}
 
-## Project Structure
+button, a {
+  font: inherit;
+}
 
-```text
-QASIM-Platform/
-├── apps/
-│   ├── backend/
-│   │   ├── src/
-│   │   │   ├── server.js
-│   │   ├── .env.example
-│   │   ├── Dockerfile
-│   │   └── package.json
-│   └── frontend/
-│       ├── src/
-│       ├── index.html
-│       ├── vite.config.js
-│       ├── .env.example
-│       ├── Dockerfile
-│       └── package.json
-├── docker-compose.yml
-├── .gitignore
-├── package.json
-└── README.md
-```
+.app-shell {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  min-height: 100vh;
+}
 
-## Quick Start
+.sidebar {
+  background: rgba(10, 18, 27, 0.85);
+  border-right: 1px solid rgba(141, 163, 188, 0.14);
+  padding: 24px 18px;
+}
 
-### 1. Install dependencies
+.brand-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 8px 22px;
+}
 
-```bash
-npm install
-```
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #6aa8ff, #6fe3d7);
+  color: #06131d;
+  font-weight: 900;
+}
 
-### 2. Start the development environment
+.brand-name {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
 
-```bash
-npm run dev
-```
+.brand-block small {
+  color: #8ea6bf;
+}
 
-This starts:
-- Frontend at http://localhost:3000
-- Backend API at http://localhost:5000
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 24px;
+}
 
-### 3. Build for production
+.nav a {
+  text-decoration: none;
+  color: #c9d9eb;
+  padding: 10px 12px;
+  border-radius: 10px;
+  transition: 0.2s ease;
+}
 
-```bash
-npm run build
-```
+.nav a.active,
+.nav a:hover {
+  background: rgba(98, 166, 255, 0.12);
+  color: #f4f8ff;
+}
 
-### 4. Run backend in production mode
+.mini-panel {
+  margin-top: 28px;
+  background: rgba(20, 35, 49, 0.75);
+  border: 1px solid rgba(152, 181, 214, 0.15);
+  border-radius: 16px;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #a7bdd7;
+}
 
-```bash
-npm start
-```
+.mini-panel strong {
+  color: #d9ecff;
+}
 
-## Environment Setup
+.main-panel {
+  padding: 28px 30px 40px;
+}
 
-Copy the example environment files:
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 26px;
+  gap: 20px;
+}
 
-```bash
-cp apps/backend/.env.example apps/backend/.env
-cp apps/frontend/.env.example apps/frontend/.env
-```
+.eyebrow {
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  color: #8ca7c2;
+}
 
-## Docker Setup
+.topbar h1 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 2.7rem);
+}
 
-```bash
-docker compose up --build
-```
+.topbar-actions {
+  display: flex;
+  gap: 12px;
+}
 
-## Default API Routes
+.ghost-btn,
+.primary-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
 
-- GET /api -> platform info
-- GET /api/health -> health status
+.ghost-btn {
+  background: rgba(151, 171, 196, 0.08);
+  color: #d8e6f7;
+  border: 1px solid rgba(152, 180, 214, 0.12);
+}
 
-## Notes
+.primary-btn {
+  background: linear-gradient(135deg, #5ba8ff, #74dfd1);
+  color: #06131d;
+  font-weight: 700;
+}
 
-This repository is intentionally structured as a starter platform so you can extend it with authentication, RBAC, dashboards, APIs, and admin modules.
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
 
-## License
+.stat-card {
+  background: rgba(16, 27, 38, 0.75);
+  border: 1px solid rgba(154, 176, 204, 0.12);
+  border-radius: 18px;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-MIT
+.stat-card.accent {
+  background: linear-gradient(135deg, rgba(95, 162, 255, 0.18), rgba(116, 223, 209, 0.08));
+}
+
+.stat-card span,
+.stat-card em {
+  color: #9bb1ca;
+}
+
+.stat-card strong {
+  font-size: clamp(1.5rem, 2vw, 2rem);
+}
+
+.content-grid,
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.panel {
+  background: rgba(16, 27, 38, 0.75);
+  border: 1px solid rgba(154, 176, 204, 0.12);
+  border-radius: 18px;
+  padding: 20px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.panel-header a {
+  color: #8dc4ff;
+  text-decoration: none;
+}
+
+.chip {
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.chip.success {
+  background: rgba(95, 196, 141, 0.15);
+  color: #a7f0be;
+}
+
+.chart-bars {
+  height: 220px;
+  display: flex;
+  align-items: end;
+  gap: 16px;
+  padding-top: 18px;
+}
+
+.bar-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+  gap: 10px;
+  height: 100%;
+}
+
+.bar {
+  display: block;
+  width: 100%;
+  max-width: 38px;
+  border-radius: 12px 12px 0 0;
+  background: linear-gradient(180deg, #7cc8ff 0%, #6fe4da 100%);
+}
+
+.h-52 { height: 52%; }
+.h-66 { height: 66%; }
+.h-57 { height: 57%; }
+.h-74 { height: 74%; }
+.h-86 { height: 86%; }
+.h-96 { height: 96%; }
+
+.bar-group label {
+  color: #8ea6bf;
+  font-size: 12px;
+}
+
+.score-wrap {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 8px;
+}
+
+.score-ring {
+  width: 130px;
+  height: 130px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: conic-gradient(#7bd7c1 0 94%, rgba(255,255,255,0.08) 94% 100%);
+  position: relative;
+}
+
+.score-ring::before {
+  content: '';
+  position: absolute;
+  inset: 16px;
+  background: rgba(10, 18, 27, 0.9);
+  border-radius: 50%;
+}
+
+.score-ring span {
+  position: relative;
+  z-index: 1;
+  font-weight: 800;
+  font-size: 1.6rem;
+}
+
+.score-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+}
+
+.score-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(20, 36, 48, 0.7);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.score-list strong {
+  font-size: 1.2rem;
+}
+
+.score-list span {
+  color: #9db5ce;
+  font-size: 12px;
+}
+
+.customer-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #e4edf9;
+}
+
+.customer-table th,
+.customer-table td {
+  text-align: left;
+  padding: 12px 8px;
+  border-bottom: 1px solid rgba(148, 170, 195, 0.12);
+}
+
+.customer-table th {
+  color: #91a9c5;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.status {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status.active {
+  background: rgba(92, 193, 138, 0.14);
+  color: #a7f0bf;
+}
+
+.status.trial {
+  background: rgba(255, 195, 92, 0.12);
+  color: #ffd787;
+}
+
+.activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.activity-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(148, 170, 195, 0.12);
+}
+
+.activity-list li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #7cc8ff, #7ce0d0);
+  margin-top: 8px;
+}
+
+.activity-list strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.activity-list p {
+  margin: 0;
+  color: #aac0d8;
+  font-size: 0.95rem;
+}
+
+.activity-list span {
+  margin-left: auto;
+  color: #8ea7c2;
+  font-size: 12px;
+}
+
+.loading-box {
+  background: rgba(20, 34, 46, 0.8);
+  border: 1px solid rgba(148, 170, 195, 0.12);
+  border-radius: 18px;
+  padding: 30px;
+  text-align: center;
+  color: #bed2eb;
+}
+
+@media (max-width: 980px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid rgba(141, 163, 188, 0.14);
+  }
+
+  .stats-grid,
+  .content-grid,
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}

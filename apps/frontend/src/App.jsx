@@ -3,6 +3,8 @@ import './App.css';
 import Dashboard from './pages/Dashboard';
 import Leads from './pages/Leads';
 import Deals from './pages/Deals';
+import Customers from './pages/Customers';
+import Tasks from './pages/Tasks';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -19,28 +21,11 @@ function App() {
         </div>
 
         <nav className="nav">
-          <a 
-            className={currentPage === 'dashboard' ? 'active' : ''}
-            onClick={() => setCurrentPage('dashboard')}
-            href="#"
-          >
-            Dashboard
-          </a>
-          <a 
-            className={currentPage === 'leads' ? 'active' : ''}
-            onClick={() => setCurrentPage('leads')}
-            href="#"
-          >
-            Leads
-          </a>
-          <a 
-            className={currentPage === 'deals' ? 'active' : ''}
-            onClick={() => setCurrentPage('deals')}
-            href="#"
-          >
-            Pipeline
-          </a>
-          <a href="#">Accounts</a>
+          <a className={currentPage === 'dashboard' ? 'active' : ''} onClick={() => setCurrentPage('dashboard')} href="#">Dashboard</a>
+          <a className={currentPage === 'leads' ? 'active' : ''} onClick={() => setCurrentPage('leads')} href="#">Leads</a>
+          <a className={currentPage === 'deals' ? 'active' : ''} onClick={() => setCurrentPage('deals')} href="#">Pipeline</a>
+          <a className={currentPage === 'customers' ? 'active' : ''} onClick={() => setCurrentPage('customers')} href="#">Accounts</a>
+          <a className={currentPage === 'tasks' ? 'active' : ''} onClick={() => setCurrentPage('tasks')} href="#">Tasks</a>
           <a href="#">Reports</a>
           <a href="#">Automation</a>
         </nav>
@@ -55,6 +40,8 @@ function App() {
         {currentPage === 'dashboard' && <Dashboard />}
         {currentPage === 'leads' && <Leads />}
         {currentPage === 'deals' && <Deals />}
+        {currentPage === 'customers' && <Customers />}
+        {currentPage === 'tasks' && <Tasks />}
       </main>
     </div>
   );

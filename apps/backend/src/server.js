@@ -10,7 +10,6 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// In-memory database
 let leads = [
   { id: 1, name: 'Summit Cloud', company: 'Summit Cloud Inc', email: 'contact@summitcloud.com', phone: '+1-555-0101', source: 'Referral', status: 'Qualified', score: 85, value: '$18,900', owner: 'Sarah Chen' },
   { id: 2, name: 'Peak Works', company: 'Peak Works Ltd', email: 'hello@peakworks.io', phone: '+1-555-0102', source: 'Outbound', status: 'New', score: 72, value: '$9,500', owner: 'Marcus Johnson' },
@@ -27,18 +26,26 @@ let deals = [
 
 let customers = [
   { id: 1001, name: 'Northwind Labs', company: 'Northwind Labs', email: 'contact@northwindlabs.com', phone: '+1-555-0201', plan: 'Enterprise', status: 'Active', joinDate: '2026-07-10' },
-  { id: 1002, name: 'Orion Retail', company: 'Orion Retail', email: 'support@orionretail.com', phone: '+1-555-0202', plan: 'Growth', status: 'Active', joinDate: '2026-07-10' }
+  { id: 1002, name: 'Orion Retail', company: 'Orion Retail', email: 'support@orionretail.com', phone: '+1-555-0202', plan: 'Growth', status: 'Active', joinDate: '2026-07-10' },
+  { id: 1003, name: 'BluePeak Studio', company: 'BluePeak Studio', email: 'hello@bluepeakstudio.com', phone: '+1-555-0203', plan: 'Scale', status: 'Active', joinDate: '2026-08-12' }
+];
+
+let tasks = [
+  { id: 1, title: 'Follow up with Summit Cloud', assignee: 'Sarah Chen', dueDate: '2026-10-12', priority: 'High', status: 'In Progress', relatedTo: 'Lead' },
+  { id: 2, title: 'Review onboarding checklist', assignee: 'Alicia Gomez', dueDate: '2026-10-13', priority: 'Medium', status: 'Scheduled', relatedTo: 'Customer' },
+  { id: 3, title: 'Prepare proposal for Harbor Finance', assignee: 'Marcus Johnson', dueDate: '2026-10-14', priority: 'High', status: 'Pending', relatedTo: 'Lead' }
 ];
 
 let nextLeadId = 5;
 let nextDealId = 105;
-let nextCustomerId = 1003;
+let nextCustomerId = 1004;
+let nextTaskId = 4;
 
 const crmMetrics = {
   monthlyRevenue: '$148,260',
   newLeads: '1,284',
   winRate: '37.8%',
-  pipelineHealth: '84%' 
+  pipelineHealth: '84%'
 };
 
 const activity = [
@@ -48,7 +55,6 @@ const activity = [
   { title: 'Lead scored', detail: 'Peak Works reached high-intent score', time: 'Yesterday' }
 ];
 
-// Dashboard
 app.get('/api', (req, res) => {
   res.json({
     name: 'QASIM Platform API',
@@ -72,6 +78,8 @@ app.get('/api/dashboard', (req, res) => {
     metrics: crmMetrics,
     deals,
     leads: leads.slice(0, 4),
+    customers: customers.slice(0, 3),
+    tasks: tasks.slice(0, 3),
     activity,
     overview: {
       activeDeals: deals.length.toString(),
@@ -82,7 +90,6 @@ app.get('/api/dashboard', (req, res) => {
   });
 });
 
-// Leads endpoints
 app.get('/api/leads', (req, res) => {
   const { status, source, owner, search } = req.query;
   let filtered = [...leads];
@@ -110,7 +117,6 @@ app.get('/api/leads/:id', (req, res) => {
 
 app.post('/api/leads', (req, res) => {
   const { name, company, email, phone, source, status, score, value, owner } = req.body;
-  
   if (!name || !company || !email) {
     return res.status(400).json({ error: 'Missing required fields: name, company, email' });
   }
@@ -136,7 +142,6 @@ app.post('/api/leads', (req, res) => {
 app.put('/api/leads/:id', (req, res) => {
   const lead = leads.find(l => l.id === parseInt(req.params.id));
   if (!lead) return res.status(404).json({ error: 'Lead not found' });
-
   Object.assign(lead, req.body);
   res.json(lead);
 });
@@ -144,12 +149,10 @@ app.put('/api/leads/:id', (req, res) => {
 app.delete('/api/leads/:id', (req, res) => {
   const index = leads.findIndex(l => l.id === parseInt(req.params.id));
   if (index === -1) return res.status(404).json({ error: 'Lead not found' });
-
   const deleted = leads.splice(index, 1);
   res.json({ message: 'Lead deleted', lead: deleted[0] });
 });
 
-// Deals endpoints
 app.get('/api/deals', (req, res) => {
   const { stage, owner, search } = req.query;
   let filtered = [...deals];
@@ -158,10 +161,7 @@ app.get('/api/deals', (req, res) => {
   if (owner) filtered = filtered.filter(d => d.owner === owner);
   if (search) {
     const term = search.toLowerCase();
-    filtered = filtered.filter(d => 
-      d.name.toLowerCase().includes(term) || 
-      d.company.toLowerCase().includes(term)
-    );
+    filtered = filtered.filter(d => d.name.toLowerCase().includes(term) || d.company.toLowerCase().includes(term));
   }
 
   res.json(filtered);
@@ -175,7 +175,6 @@ app.get('/api/deals/:id', (req, res) => {
 
 app.post('/api/deals', (req, res) => {
   const { leadId, name, company, value, stage, owner, probability } = req.body;
-  
   if (!name || !company) {
     return res.status(400).json({ error: 'Missing required fields: name, company' });
   }
@@ -194,7 +193,6 @@ app.post('/api/deals', (req, res) => {
 
   deals.push(newDeal);
 
-  // If converting from lead, update lead status
   if (leadId) {
     const lead = leads.find(l => l.id === leadId);
     if (lead) lead.status = 'Converted';
@@ -206,7 +204,6 @@ app.post('/api/deals', (req, res) => {
 app.put('/api/deals/:id', (req, res) => {
   const deal = deals.find(d => d.id === parseInt(req.params.id));
   if (!deal) return res.status(404).json({ error: 'Deal not found' });
-
   Object.assign(deal, req.body);
   res.json(deal);
 });
@@ -214,19 +211,16 @@ app.put('/api/deals/:id', (req, res) => {
 app.delete('/api/deals/:id', (req, res) => {
   const index = deals.findIndex(d => d.id === parseInt(req.params.id));
   if (index === -1) return res.status(404).json({ error: 'Deal not found' });
-
   const deleted = deals.splice(index, 1);
   res.json({ message: 'Deal deleted', deal: deleted[0] });
 });
 
-// Convert lead to deal
 app.post('/api/leads/:id/convert', (req, res) => {
   const lead = leads.find(l => l.id === parseInt(req.params.id));
   if (!lead) return res.status(404).json({ error: 'Lead not found' });
   if (lead.status === 'Converted') return res.status(400).json({ error: 'Lead already converted' });
 
   const { dealName, dealValue, dealStage } = req.body;
-  
   const newDeal = {
     id: nextDealId++,
     leadId: lead.id,
@@ -245,7 +239,6 @@ app.post('/api/leads/:id/convert', (req, res) => {
   res.status(201).json({ deal: newDeal, lead });
 });
 
-// Customers endpoints
 app.get('/api/customers', (req, res) => {
   const { status, search } = req.query;
   let filtered = [...customers];
@@ -253,23 +246,59 @@ app.get('/api/customers', (req, res) => {
   if (status) filtered = filtered.filter(c => c.status === status);
   if (search) {
     const term = search.toLowerCase();
-    filtered = filtered.filter(c => 
-      c.name.toLowerCase().includes(term) || 
-      c.company.toLowerCase().includes(term)
-    );
+    filtered = filtered.filter(c => c.name.toLowerCase().includes(term) || c.company.toLowerCase().includes(term));
   }
 
   res.json(filtered);
 });
 
-// Convert deal to customer
+app.get('/api/customers/:id', (req, res) => {
+  const customer = customers.find(c => c.id === parseInt(req.params.id));
+  if (!customer) return res.status(404).json({ error: 'Customer not found' });
+  res.json(customer);
+});
+
+app.post('/api/customers', (req, res) => {
+  const { name, company, email, phone, plan, status } = req.body;
+  if (!name || !company || !email) {
+    return res.status(400).json({ error: 'Missing required fields: name, company, email' });
+  }
+
+  const newCustomer = {
+    id: nextCustomerId++,
+    name,
+    company,
+    email,
+    phone: phone || '',
+    plan: plan || 'Growth',
+    status: status || 'Active',
+    joinDate: new Date().toISOString().split('T')[0]
+  };
+
+  customers.push(newCustomer);
+  res.status(201).json(newCustomer);
+});
+
+app.put('/api/customers/:id', (req, res) => {
+  const customer = customers.find(c => c.id === parseInt(req.params.id));
+  if (!customer) return res.status(404).json({ error: 'Customer not found' });
+  Object.assign(customer, req.body);
+  res.json(customer);
+});
+
+app.delete('/api/customers/:id', (req, res) => {
+  const index = customers.findIndex(c => c.id === parseInt(req.params.id));
+  if (index === -1) return res.status(404).json({ error: 'Customer not found' });
+  const deleted = customers.splice(index, 1);
+  res.json({ message: 'Customer deleted', customer: deleted[0] });
+});
+
 app.post('/api/deals/:id/convert-customer', (req, res) => {
   const deal = deals.find(d => d.id === parseInt(req.params.id));
   if (!deal) return res.status(404).json({ error: 'Deal not found' });
   if (deal.stage !== 'Closed Won') return res.status(400).json({ error: 'Only closed deals can convert to customers' });
 
   const { plan, contact } = req.body;
-  
   const newCustomer = {
     id: nextCustomerId++,
     name: contact?.name || deal.name,
@@ -282,11 +311,63 @@ app.post('/api/deals/:id/convert-customer', (req, res) => {
   };
 
   customers.push(newCustomer);
-
   res.status(201).json({ customer: newCustomer, deal });
 });
 
-// Stats
+app.get('/api/tasks', (req, res) => {
+  const { status, assignee, search } = req.query;
+  let filtered = [...tasks];
+
+  if (status) filtered = filtered.filter(t => t.status === status);
+  if (assignee) filtered = filtered.filter(t => t.assignee === assignee);
+  if (search) {
+    const term = search.toLowerCase();
+    filtered = filtered.filter(t => t.title.toLowerCase().includes(term) || t.assignee.toLowerCase().includes(term));
+  }
+
+  res.json(filtered);
+});
+
+app.get('/api/tasks/:id', (req, res) => {
+  const task = tasks.find(t => t.id === parseInt(req.params.id));
+  if (!task) return res.status(404).json({ error: 'Task not found' });
+  res.json(task);
+});
+
+app.post('/api/tasks', (req, res) => {
+  const { title, assignee, dueDate, priority, status, relatedTo } = req.body;
+  if (!title || !assignee) {
+    return res.status(400).json({ error: 'Missing required fields: title, assignee' });
+  }
+
+  const newTask = {
+    id: nextTaskId++,
+    title,
+    assignee,
+    dueDate: dueDate || '',
+    priority: priority || 'Medium',
+    status: status || 'Pending',
+    relatedTo: relatedTo || 'General'
+  };
+
+  tasks.push(newTask);
+  res.status(201).json(newTask);
+});
+
+app.put('/api/tasks/:id', (req, res) => {
+  const task = tasks.find(t => t.id === parseInt(req.params.id));
+  if (!task) return res.status(404).json({ error: 'Task not found' });
+  Object.assign(task, req.body);
+  res.json(task);
+});
+
+app.delete('/api/tasks/:id', (req, res) => {
+  const index = tasks.findIndex(t => t.id === parseInt(req.params.id));
+  if (index === -1) return res.status(404).json({ error: 'Task not found' });
+  const deleted = tasks.splice(index, 1);
+  res.json({ message: 'Task deleted', task: deleted[0] });
+});
+
 app.get('/api/leads/stats/summary', (req, res) => {
   res.json({
     total: leads.length,
@@ -314,6 +395,8 @@ app.get('/api/deals/stats/summary', (req, res) => {
 
 app.listen(port, () => {
   console.log(`QASIM CRM API running on http://localhost:${port}`);
-  console.log(`Leads API: GET http://localhost:${port}/api/leads`);
-  console.log(`Deals API: GET http://localhost:${port}/api/deals`);
+  console.log(`Leads API: http://localhost:${port}/api/leads`);
+  console.log(`Deals API: http://localhost:${port}/api/deals`);
+  console.log(`Customers API: http://localhost:${port}/api/customers`);
+  console.log(`Tasks API: http://localhost:${port}/api/tasks`);
 });

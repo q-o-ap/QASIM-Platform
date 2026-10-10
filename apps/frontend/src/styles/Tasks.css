@@ -1,0 +1,129 @@
+.customers-table,
+.tasks-grid {
+  width: 100%;
+}
+
+.customers-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #e4edf9;
+}
+
+.customers-table th,
+.customers-table td {
+  text-align: left;
+  padding: 14px 12px;
+  border-bottom: 1px solid rgba(148, 170, 195, 0.12);
+}
+
+.customers-table th {
+  color: #91a9c5;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status-badge.active {
+  background: rgba(96, 198, 145, 0.15);
+  color: #aaf0c0;
+}
+
+.status-badge.trial {
+  background: rgba(255, 184, 94, 0.15);
+  color: #ffd17d;
+}
+
+.status-badge.paused {
+  background: rgba(255, 109, 66, 0.15);
+  color: #ffb89a;
+}
+
+.status-badge.churned {
+  background: rgba(255, 107, 107, 0.15);
+  color: #ffb8b8;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: #8dc4ff;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 1rem;
+}
+
+.icon-btn.delete {
+  color: #ff6b6b;
+}
+
+.tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.task-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.task-card h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.task-card ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #dfeaf7;
+}
+
+.task-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.priority {
+  display: inline-block;
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.priority.low {
+  background: rgba(96, 198, 145, 0.15);
+  color: #aaf0c0;
+}
+
+.priority.medium {
+  background: rgba(255, 184, 94, 0.15);
+  color: #ffd17d;
+}
+
+.priority.high {
+  background: rgba(255, 107, 107, 0.15);
+  color: #ffb8b8;
+}

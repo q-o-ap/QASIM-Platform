@@ -1,0 +1,138 @@
+.deals-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #e4edf9;
+  font-size: 0.95rem;
+}
+
+.deals-table th,
+.deals-table td {
+  text-align: left;
+  padding: 14px 12px;
+  border-bottom: 1px solid rgba(148, 170, 195, 0.12);
+}
+
+.deals-table th {
+  background: rgba(20, 35, 50, 0.4);
+  color: #91a9c5;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.deals-table tbody tr:hover {
+  background: rgba(92, 166, 255, 0.06);
+}
+
+.deals-table strong {
+  color: #f1f7ff;
+}
+
+.stage {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.stage.discovery {
+  background: rgba(120, 160, 255, 0.15);
+  color: #b8d1ff;
+}
+
+.stage.proposal {
+  background: rgba(255, 192, 61, 0.15);
+  color: #ffd978;
+}
+
+.stage.negotiation {
+  background: rgba(255, 109, 66, 0.15);
+  color: #ffb89a;
+}
+
+.stage.closed-won {
+  background: rgba(96, 198, 145, 0.15);
+  color: #aaf0c0;
+}
+
+.stage.closed-lost {
+  background: rgba(255, 107, 107, 0.15);
+  color: #ffb8b8;
+}
+
+.probability {
+  display: inline-block;
+  background: rgba(116, 223, 209, 0.12);
+  color: #a7f0c0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.convert-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(148, 170, 195, 0.12);
+}
+
+.convert-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(148, 170, 195, 0.12);
+}
+
+.convert-form h3 {
+  margin: 0 0 12px;
+  color: #f1f7ff;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  color: #c9d9eb;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select {
+  background: rgba(20, 35, 50, 0.6);
+  border: 1px solid rgba(150, 176, 210, 0.2);
+  color: #e5eef9;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: rgba(92, 166, 255, 0.5);
+  background: rgba(20, 35, 50, 0.8);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.form-actions button {
+  flex: 1;
+}

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import Dashboard from './pages/Dashboard';
 import Leads from './pages/Leads';
+import Deals from './pages/Deals';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -32,7 +33,13 @@ function App() {
           >
             Leads
           </a>
-          <a href="#">Pipeline</a>
+          <a 
+            className={currentPage === 'deals' ? 'active' : ''}
+            onClick={() => setCurrentPage('deals')}
+            href="#"
+          >
+            Pipeline
+          </a>
           <a href="#">Accounts</a>
           <a href="#">Reports</a>
           <a href="#">Automation</a>
@@ -47,6 +54,7 @@ function App() {
       <main className="main-panel">
         {currentPage === 'dashboard' && <Dashboard />}
         {currentPage === 'leads' && <Leads />}
+        {currentPage === 'deals' && <Deals />}
       </main>
     </div>
   );

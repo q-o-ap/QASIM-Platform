@@ -1,4 +1,6 @@
-function LeadList({ leads, onEdit, onDelete }) {
+import { useState } from 'react';
+
+function LeadList({ leads, onEdit, onDelete, onView }) {
   return (
     <div className="panel">
       <table className="leads-table">
@@ -27,6 +29,7 @@ function LeadList({ leads, onEdit, onDelete }) {
               <td>{lead.value}</td>
               <td>{lead.owner}</td>
               <td>
+                <button className="icon-btn" title="View details" onClick={() => onView(lead)}>◉</button>
                 <button className="icon-btn" title="Edit" onClick={() => onEdit(lead)}>✎</button>
                 <button className="icon-btn delete" title="Delete" onClick={() => onDelete(lead.id)}>✕</button>
               </td>

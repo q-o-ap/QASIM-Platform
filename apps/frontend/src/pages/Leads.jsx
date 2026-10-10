@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import LeadForm from '../components/LeadForm';
 import LeadList from '../components/LeadList';
 import LeadFilters from '../components/LeadFilters';
+import LeadDetail from '../components/LeadDetail';
 import '../styles/Leads.css';
 
 function Leads() {
@@ -10,6 +11,7 @@ function Leads() {
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editingLead, setEditingLead] = useState(null);
+  const [selectedLead, setSelectedLead] = useState(null);
   const [filters, setFilters] = useState({ status: '', source: '', search: '' });
 
   useEffect(() => {
@@ -112,6 +114,7 @@ function Leads() {
       ) : leads.length > 0 ? (
         <LeadList 
           leads={leads} 
+          onView={(lead) => setSelectedLead(lead)}
           onEdit={(lead) => { setEditingLead(lead); setShowForm(true); }}
           onDelete={handleDeleteLead}
         />
@@ -123,6 +126,8 @@ function Leads() {
           </button>
         </div>
       )}
+
+      {selectedLead && <LeadDetail lead={selectedLead} onClose={() => setSelectedLead(null)} />}
     </>
   );
 }
